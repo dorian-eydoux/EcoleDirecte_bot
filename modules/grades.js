@@ -2,6 +2,9 @@ const telegram = require('../clients/telegram')
 const { existsSync, writeFileSync } = require('fs')
 const cache = existsSync('./cache/grades.json') ? require('../cache/grades.json') : []
 
+const { bold } = require('../utils/formatters')
+const subjects = require('../utils/subjects.json')
+
 module.exports = async ed => {
     const grades = (await ed.getGrades())
         .filter(grade => !cache.includes(grade._raw.id))
@@ -9,8 +12,7 @@ module.exports = async ed => {
     for (const grade of grades) {
         console.info(`New grade #${grade._raw.id}`)
         cache.push(grade._raw.id)
-        const message = `📝 *New grade*\n${grade.name}\n\n🧮 *${grade.value}* / ${grade.outOf}\n${grade.weight !== 1 ? `🎚 Coefficient *${grade.weight}*\n` : ''}📊 Averange *${grade.classAvg}*\n🧑🏻‍🏫 ${grade.subjectCode}\n🗓 ${grade.date.toLocaleDateString('fr')}`
-            .replaceAll('.', '\\.')
+        const message = `🧮 ${bold('New grade')}\n${grade.name}\n\n✨ ${bold(grade.value)} / ${grade.outOf}\n${grade.weight !== 1 ? `🎚 Coefficient ${bold(grade.weight)}\n` : ''}📊 Averange ${bold(grade.classAvg)}\n🧑🏻‍🏫 ${subjects[grade.subjectCode]}\n🗓 ${grade.date.toLocaleDateString('fr')}`
         await telegram(message)
     }
 

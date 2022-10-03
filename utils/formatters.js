@@ -1,0 +1,1 @@
+module.exports.bold = string => `<strong>${string}</strong>`

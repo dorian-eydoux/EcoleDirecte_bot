@@ -10,9 +10,9 @@ module.exports = async ed => {
         .filter(assignement => !cache.includes(assignement.id))
 
     for (const assignement of homework) {
-        console.info(`New homework #${assignement.id}`)
+        console.info(`New assignement #${assignement.id}`)
         cache.push(assignement.id)
-        const message = `📝 ${bold('New assignement')}\n🧑🏻‍🏫 ${subjects[assignement.subject.code]}\n🗓 ${assignement.date.toLocaleDateString('fr')}${assignement.job ? `\n\n${assignement.job.content.text}` : '' }`
+        const message = `📝 ${bold('New assignement')}\n🧑🏻‍🏫 ${subjects[assignement.subject.code] || assignement.subject.name}\n🗓 ${assignement.date.toLocaleDateString('fr')}${assignement.job ? `\n\n${assignement.job.content.text}` : '' }`
         await telegram(message)
     }
 
